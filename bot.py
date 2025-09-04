@@ -5,7 +5,7 @@ import os
 BOT_TOKEN = os.environ.get("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")  
 
 
-paid_members = @ajay8630033  
+paid_members = "@ajay8630033"  
 
 UPI_LINK = "upi://pay?pa=nakuldev34567@ybl&pn=NakulDev&am=199&cu=INR"
 
