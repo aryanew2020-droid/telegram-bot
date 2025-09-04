@@ -28,7 +28,7 @@ async def nsfw(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "❌ This is premium. Please pay first:\n" + UPI_LINK
         )
 
-app = ApplicationBuilder().token(8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug).build()
+app = ApplicationBuilder().token("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug").build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("sfw", sfw))
 app.add_handler(CommandHandler("nsfw", nsfw))
