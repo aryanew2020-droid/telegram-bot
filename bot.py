@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import os
 
-BOT_TOKEN = os.environ.get("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")  
+BOT_TOKEN = os.environ.get("BOT TOKEN")  
 
 
 paid_members = "@ajay8630033"  
