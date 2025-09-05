@@ -9,7 +9,7 @@ async def imagine(update, context):
         await update.message.reply_text("Please give me a prompt, e.g. /imagine cute anime girl")
         return
     
-    url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image"
+    url = "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image"
     headers = {
         "Accept": "application/json",
         "Authorization": f"Bearer {API_KEY}"
