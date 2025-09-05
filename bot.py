@@ -1,36 +1,39 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-import os
+from telegram.ext import ApplicationBuilder, CommandHandler
+import requests, base64
 
-BOT_TOKEN = os.environ.get("BOT TOKEN")  
+API_KEY = "sk-Zytg7AMjAn39DzuyNLlK0gqy1JN4Bj0lsN37bFVqQjtuegjb"   
 
+async def imagine(update, context):
+    prompt = " ".join(context.args)  # get user input after /imagine
+    if not prompt:
+        await update.message.reply_text("Please give me a prompt, e.g. /imagine cute anime girl")
+        return
+    
+    url = "https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image"
+    headers = {
+        "Accept": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    }
+    data = {
+        "text_prompts": [{"text": prompt}],
+        "cfg_scale": 7,
+        "height": 512,
+        "width": 512,
+        "samples": 1,
+        "steps": 25,
+    }
 
-paid_members = "@ajay8630033"  
+    response = requests.post(url, headers=headers, json=data)
 
-UPI_LINK = "upi://pay?pa=nakuldev34567@ybl&pn=NakulDev&am=199&cu=INR"
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "Welcome! ✅ Free features unlocked.\n\n"
-        "For NSFW premium, please pay here:\n"
-        f"{UPI_LINK}\n\n"
-        "After payment, send screenshot to admin 📸"
-    )
-
-async def sfw(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Here’s a safe meme for everyone 🌸")
-
-async def nsfw(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id in paid_members:
-        await update.message.reply_text("🔥 NSFW content for members only 🔥")
+    if response.status_code == 200:
+        result = response.json()
+        image_base64 = result["artifacts"][0]["base64"]
+        with open("output.png", "wb") as f:
+            f.write(base64.b64decode(image_base64))
+        await update.message.reply_photo(photo=open("output.png", "rb"))
     else:
-        await update.message.reply_text(
-            "❌ This is premium. Please pay first:\n" + UPI_LINK
-        )
+        await update.message.reply_text("Error: " + response.text)
 
 app = ApplicationBuilder().token("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug").build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("sfw", sfw))
-app.add_handler(CommandHandler("nsfw", nsfw))
-
+app.add_handler(CommandHandler("imagine", imagine))
 app.run_polling()
