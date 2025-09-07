@@ -8,7 +8,7 @@ import openai
 
 # ---------------- CONFIG ----------------
 TELEGRAM_TOKEN = os.getenv("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")
-OPENAI_API_KEY = os.getenv("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")
+OPENAI_API_KEY = os.getenv("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")
 FREE_LIMIT = 3
 UPI_ID = os.getenv("UPI_ID", "nakuldev34567@ybl")  # set your UPI here
 
