@@ -4,18 +4,19 @@ import os
 from datetime import datetime
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-import openai
+import requests
 
 # ---------------- CONFIG ----------------
 TELEGRAM_TOKEN = os.getenv("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")
-OPENAI_API_KEY = os.getenv("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")
+PERPLEXITY_API_KEY = os.getenv("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")  # instead of OPENAI
 FREE_LIMIT = 3
-UPI_ID = os.getenv("UPI_ID", "nakuldev34567@ybl")  # set your UPI here
-
-openai.api_key = OPENAI_API_KEY
+UPI_ID = os.getenv("UPI_ID", "yourupi@upi")  # set your UPI here
 
 # ---------------- LOGGING ----------------
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 # ---------------- DATABASE ----------------
@@ -54,12 +55,26 @@ def upgrade_premium(user_id):
     conn.commit()
 
 
-# ---------------- AI ----------------
-def ask_ai(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}]
-    )
-    return response.choices[0].message.content.strip()
+# ---------------- AI (Perplexity) ----------------
+def ask_ai(prompt: str) -> str:
+    url = "https://api.perplexity.ai/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+    payload = {
+        "model": "sonar-pro",  # Perplexity main model
+        "messages": [{"role": "user", "content": prompt}]
+    }
+
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+        return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"⚠️ Error: {e}"
 
 
 # ---------------- COMMANDS ----------------
@@ -67,7 +82,7 @@ def start(update: Update, context: CallbackContext):
     user = update.effective_user
     update.message.reply_text(
         f"Hello {user.first_name}! 👋\n\n"
-        "I’m your AI Assistant for India 🇮🇳\n"
+        "I’m your AI Assistant powered by Perplexity 🤖\n"
         f"You have {FREE_LIMIT} free requests per day.\n"
         "👉 Use /buy to upgrade to Premium (Unlimited).\n"
     )
