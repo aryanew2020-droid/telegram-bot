@@ -10,7 +10,7 @@ import requests
 TELEGRAM_TOKEN = os.getenv("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")
 PERPLEXITY_API_KEY = os.getenv("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")  # instead of OPENAI
 FREE_LIMIT = 3
-UPI_ID = os.getenv("UPI_ID", "yourupi@upi")  # set your UPI here
+UPI_ID = os.getenv("UPI_ID", "nakuldev34567@ybl")  # set your UPI here
 
 # ---------------- LOGGING ----------------
 logging.basicConfig(
