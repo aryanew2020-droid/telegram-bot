@@ -23,7 +23,7 @@ def help_command(update, context):
     update.message.reply_text("Commands:\n/start - Greet\n/help - Help menu")
 
 def run_bot():
-    TOKEN = os.environ.get("8225064493:AAEyCw-j661DrYOD3ZraosTDYBYaAZ2-pug")  # get from Replit Secrets
+    TOKEN = os.environ.get("TOKEN")  # get from Replit Secrets
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
 
